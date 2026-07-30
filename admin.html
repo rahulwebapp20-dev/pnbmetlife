@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | InsureCorp Portal</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+        
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Admin Panel</span>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" id="menuSubmissions">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Submissions</span>
+                </div>
+                <div class="menu-item" id="menuPolicies">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Policies</span>
+                </div>
+                <div class="menu-item" id="menuUpi">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>UPI Config</span>
+                </div>
+            </div>
+            
+            <div class="menu-item" id="menuLogout" style="margin-top: auto; border-top: 1px solid #334155; padding-top: 20px; color: #ef4444;">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </div>
+        </div>
+
+        <!-- Main Dashboard View -->
+        <div class="admin-main">
+            
+            <div class="admin-header">
+                <div>
+                    <h1 id="dashboardTitle">Payment Audit Panel</h1>
+                    <p style="color: var(--text-medium); font-size: 0.9rem;" id="dashboardSubtitle">Review and verify user premium payment uploads</p>
+                </div>
+                <div style="font-weight: 700; color: var(--text-medium); font-size: 0.95rem;">
+                    Mode: <span id="dbConnectionBadge" style="background-color: var(--warning-light); color: var(--warning); padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.8rem;">Mock Local Mode</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fa-solid fa-file-contract"></i></div>
+                    <div class="stat-details">
+                        <h3 id="statTotalPolicies">1</h3>
+                        <p>Total Policies</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <div class="stat-details">
+                        <h3 id="statPendingAudits">0</h3>
+                        <p>Pending Audits</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-details">
+                        <h3 id="statApprovedCollections">₹0</h3>
+                        <p>Approved Collections</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 1: Submissions Audit List -->
+            <div class="admin-panel active" id="panelSubmissions">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ref Number</th>
+                                <th>Policy No</th>
+                                <th>Amount</th>
+                                <th>UTR/Txn ID</th>
+                                <th>Receipt Screenshot</th>
+                                <th>Submitted At</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; color: var(--text-light); padding: 40px;">Loading submissions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Panel 2: Policies Manager -->
+            <div class="admin-panel" id="panelPolicies">
+                <div class="dashboard-grid-2">
+                    
+                    <!-- Left: Create Policy Card -->
+                    <div class="dashboard-card">
+                        <h2>Create Policy</h2>
+                        <form id="createPolicyForm">
+                            <div class="form-group">
+                                <label class="form-label">Policy Number</label>
+                                <input type="text" id="policyNumberInput" class="form-control" placeholder="e.g. PNB12345678" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Holder Name</label>
+                                <input type="text" id="holderNameInput" class="form-control" placeholder="e.g. Rahul Kumar" required>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" id="dobInput" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Mobile Number</label>
+                                    <input type="tel" id="mobileInput" class="form-control" placeholder="9876543210" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" id="emailInput" class="form-control" placeholder="name@email.com" required>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Policy Type</label>
+                                    <input type="text" id="typeInput" class="form-control" placeholder="e.g. Life Insurance" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nominee Name</label>
+                                    <input type="text" id="nomineeInput" class="form-control" placeholder="Nominee" required>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Sum Assured (₹)</label>
+                                    <input type="number" id="sumAssuredInput" class="form-control" placeholder="1000000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Premium Amount (₹)</label>
+                                    <input type="number" id="premiumAmountInput" class="form-control" placeholder="24500" required>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Start Date</label>
+                                    <input type="date" id="startDateInput" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">End Date</label>
+                                    <input type="date" id="endDateInput" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label class="form-label">Due Date</label>
+                                    <input type="date" id="dueDateInput" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Policy Status</label>
+                                    <select id="statusSelect" class="form-control" style="padding: 14px;">
+                                        <option value="Active">Active</option>
+                                        <option value="Lapsed">Lapsed</option>
+                                        <option value="Terminated">Terminated</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary ripple-btn" style="width: 100%; margin-top: 10px;">
+                                <i class="fa-solid fa-circle-plus"></i> Save Policy Record
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Table of Policies -->
+                    <div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Policy Number</th>
+                                        <th>Customer</th>
+                                        <th>Premium</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="policiesTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-light); padding: 40px;">Loading policies...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Panel 3: UPI Config Management -->
+            <div class="admin-panel" id="panelUpi">
+                <div class="dashboard-card" style="max-width: 600px; margin: 0 auto;">
+                    <h2>Active UPI Configuration</h2>
+                    <form id="upiConfigForm">
+                        <div class="form-group">
+                            <label class="form-label">UPI ID</label>
+                            <input type="text" id="upiIdInput" class="form-control" placeholder="pay@insurecorp" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Account Holder Name</label>
+                            <input type="text" id="upiHolderInput" class="form-control" placeholder="InsureCorp Ltd" required>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-primary ripple-btn" style="width: 100%;">
+                                <i class="fa-solid fa-floppy-disk"></i> Update UPI Parameters
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit Policy Modal Overlay -->
+    <div class="modal-overlay" id="editPolicyModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('editPolicyModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom: 20px;">Edit Policy</h2>
+            <form id="editPolicyForm">
+                <div class="form-group">
+                    <label class="form-label">Policy Number</label>
+                    <input type="text" id="editPolicyNo" class="form-control" readonly style="background: #e2e8f0;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Holder Name</label>
+                    <input type="text" id="editHolder" class="form-control" required>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" id="editDob" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" id="editMobile" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="editEmail" class="form-control" required>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Policy Type</label>
+                        <input type="text" id="editType" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nominee Name</label>
+                        <input type="text" id="editNominee" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Sum Assured (₹)</label>
+                        <input type="number" id="editSumAssured" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Premium Amount (₹)</label>
+                        <input type="number" id="editPremiumAmount" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" id="editStartDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Date</label>
+                        <input type="date" id="editEndDate" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Due Date</label>
+                        <input type="date" id="editDueDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Policy Status</label>
+                        <select id="editStatus" class="form-control" style="padding: 14px;">
+                            <option value="Active">Active</option>
+                            <option value="Lapsed">Lapsed</option>
+                            <option value="Terminated">Terminated</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary ripple-btn" style="width: 100%; margin-top: 10px;">
+                    Save Policy Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Screenshot Modal Viewer -->
+    <div class="modal-overlay" id="screenshotModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" onclick="closeModal('screenshotModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Receipt Screenshot Preview</h2>
+            <img src="" id="screenshotModalImage" class="modal-img-preview" alt="Uploaded payment receipt screenshot">
+        </div>
+    </div>
+
+    <!-- Admin Login Screen Overlay -->
+    <div class="modal-overlay" id="adminLoginOverlay" style="display: flex; z-index: 1000;">
+        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 40px 30px;">
+            <div style="width: 64px; height: 64px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 20px;">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 style="margin-bottom: 10px; color: var(--text-dark);">Admin Gate</h2>
+            <p style="color: var(--text-medium); font-size: 0.9rem; margin-bottom: 30px;">Please authenticate to access the insurance dashboard.</p>
+            
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminUsername" class="form-label">Username</label>
+                    <input type="text" id="adminUsername" class="form-control" placeholder="Enter Username" required autocomplete="off">
+                </div>
+                <div class="form-group" style="margin-bottom: 30px;">
+                    <label for="adminPassword" class="form-label">Password</label>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter Password" required>
+                </div>
+                <div id="loginError" style="color: var(--danger); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: none;">
+                    Invalid username or password.
+                </div>
+                <button type="submit" class="btn btn-primary ripple-btn" style="width: 100%; padding: 14px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Authenticate
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supabase SDK and custom logic scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

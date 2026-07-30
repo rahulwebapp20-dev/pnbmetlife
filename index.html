@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Payment Portal | InsureCorp</title>
+    <meta name="description" content="Securely pay your insurance premium online using UPI in just a few simple steps with our manual verification portal.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/scroll-to-top.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-inner">
+            <div class="logo">
+                <img src="assets/logo.jpg" alt="InsureCorp Logo">
+                <span>InsureCorp</span>
+            </div>
+            
+            <div class="header-right">
+                <div class="support-phone" style="margin-right: 15px;">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span>1800 123 4567</span>
+                </div>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Section -->
+    <section class="payment-section section-padding" id="payment-portal" style="min-height: calc(100vh - 180px); display: flex; align-items: center;">
+        <div class="container" style="width: 100%;">
+            
+            <!-- Timeline Steps -->
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                <div class="timeline-line-fill" id="progressLineFill"></div>
+                <div class="timeline-progress-bar">
+                    <div class="t-step active" id="stepIndicator1">
+                        <div class="t-step-circle" id="circle1">1</div>
+                        <div class="t-step-label">Verification</div>
+                    </div>
+                    <div class="t-step" id="stepIndicator2">
+                        <div class="t-step-circle" id="circle2">2</div>
+                        <div class="t-step-label">Policy Details</div>
+                    </div>
+                    <div class="t-step" id="stepIndicator3">
+                        <div class="t-step-circle" id="circle3">3</div>
+                        <div class="t-step-label">UPI Payment</div>
+                    </div>
+                    <div class="t-step" id="stepIndicator4">
+                        <div class="t-step-circle" id="circle4">4</div>
+                        <div class="t-step-label">Submitted</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi Step Card -->
+            <div class="multi-step-card">
+
+                <!-- Step 1: Policy Verification -->
+                <div class="step-content active" id="step1">
+                    <div class="step-header">
+                        <h2>Verify Your Policy</h2>
+                        <p>Enter your policy number to load details and proceed with the payment.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="policyNumber" class="form-label">Policy Number</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="policyNumber" class="form-control" placeholder="Enter Policy Number (e.g. PNB45896231)" autocomplete="off">
+                        </div>
+                        <div class="form-helper">Your policy number can be found in your insurance welcome kit or previous premium receipt.</div>
+                        <div class="error-message" id="policyError">Please enter a valid policy number (minimum 8 characters).</div>
+                    </div>
+                    
+                    <div class="step-actions" style="justify-content: center; border: none; margin-top: 20px;">
+                        <button class="btn btn-primary btn-lg ripple-btn" id="verifyBtn" style="width: 100%; max-width: 320px;">
+                            Verify Policy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Policy Details -->
+                <div class="step-content" id="step2">
+                    <div class="step-header">
+                        <h2>Confirm Policy Details</h2>
+                        <p>Please check and verify the policyholder information below before starting payment.</p>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <div class="profile-avatar-sec">
+                            <div class="profile-avatar">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <span class="status-badge" style="background-color: var(--success-light); color: var(--success); font-weight: 700; border-radius: var(--radius-full); padding: 4px 12px; font-size: 0.85rem;" id="lblStatus">Active</span>
+                        </div>
+                        <div class="profile-details-grid">
+                            <div class="profile-item">
+                                <i class="fa-solid fa-file-invoice"></i>
+                                <div class="profile-item-content">
+                                    <label>Policy Number</label>
+                                    <span id="lblPolicyNo">PNB45896231</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-circle-user"></i>
+                                <div class="profile-item-content">
+                                    <label>Customer Name</label>
+                                    <span id="lblHolder">Rahul Kumar</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-cake-candles"></i>
+                                <div class="profile-item-content">
+                                    <label>Date of Birth</label>
+                                    <span id="lblDob">15 May 1998</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                                <div class="profile-item-content">
+                                    <label>Mobile Number</label>
+                                    <span id="lblMobile">9876543210</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <div class="profile-item-content">
+                                    <label>Email Address</label>
+                                    <span id="lblEmail">rahul@email.com</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-shield-heart"></i>
+                                <div class="profile-item-content">
+                                    <label>Policy Type</label>
+                                    <span id="lblType">Life Insurance</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                                <div class="profile-item-content">
+                                    <label>Sum Assured</label>
+                                    <span id="lblSumAssured">₹10,00,000</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-users-viewfinder"></i>
+                                <div class="profile-item-content">
+                                    <label>Nominee Name</label>
+                                    <span id="lblNominee">Sunita Devi</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-calendar-days"></i>
+                                <div class="profile-item-content">
+                                    <label>Policy Start Date</label>
+                                    <span id="lblStartDate">25 August 2020</span>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <div class="profile-item-content">
+                                    <label>Policy End Date</label>
+                                    <span id="lblEndDate">25 August 2040</span>
+                                </div>
+                            </div>
+                            <div class="premium-summary-highlight">
+                                <div>
+                                    <label>Premium Amount Due</label>
+                                    <p style="font-size: 0.85rem; opacity: 0.85;">Due Date: <span id="lblDueDate" style="font-weight: 700;">25 August 2026</span></p>
+                                </div>
+                                <h3 id="lblAmount">₹24,500</h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn btn-outline ripple-btn" id="backToStep1Btn">Back</button>
+                        <button class="btn btn-primary ripple-btn" id="continueToStep3Btn">Continue to Payment</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Manual UPI Payment -->
+                <div class="step-content" id="step3">
+                    <div class="step-header">
+                        <h2>Select Payment Method</h2>
+                        <p>Select your payment method below to complete the premium payment.</p>
+                    </div>
+
+                    <!-- Payment Method Tabs -->
+                    <div class="payment-methods-tabs" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px;">
+                        <div class="pay-method-tab active" style="border: 2px solid var(--primary); padding: 16px; border-radius: var(--radius-md); text-align: center; cursor: pointer; background: var(--primary-light);">
+                            <i class="fa-solid fa-qrcode" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; display: block;"></i>
+                            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-dark);">UPI QR Scan (Manual)</span>
+                        </div>
+                        <div class="pay-method-tab disabled" style="border: 2px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); text-align: center; opacity: 0.6; cursor: not-allowed; background: #f8fafc;">
+                            <i class="fa-solid fa-building-columns" style="font-size: 1.5rem; color: var(--text-light); margin-bottom: 8px; display: block;"></i>
+                            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-light);">Net Banking</span>
+                        </div>
+                        <div class="pay-method-tab disabled" style="border: 2px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); text-align: center; opacity: 0.6; cursor: not-allowed; background: #f8fafc;">
+                            <i class="fa-solid fa-credit-card" style="font-size: 1.5rem; color: var(--text-light); margin-bottom: 8px; display: block;"></i>
+                            <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-light);">Cards (Debit/Credit)</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Summary -->
+                    <div class="upi-summary-header">
+                        <div class="upi-sum-item">
+                            <label>Policy Number</label>
+                            <span id="payPolicyNo">PNB45896231</span>
+                        </div>
+                        <div class="upi-sum-item">
+                            <label>Customer Name</label>
+                            <span id="payHolder">Rahul Kumar</span>
+                        </div>
+                        <div class="upi-sum-item highlight-total">
+                            <label>Total Payable</label>
+                            <span id="payTotalAmount">₹24,500</span>
+                        </div>
+                    </div>
+
+                    <!-- UPI QR Code -->
+                    <div class="upi-qr-section">
+                        <div class="qr-card-wrapper">
+                            <svg width="200" height="200" viewBox="0 0 100 100" style="background:#fff; padding: 10px; border-radius: 8px;">
+                                <path d="M0 0h30v10H10v20H0V0zm70 0h30v30H90V10H70V0zM0 70h10v20h20v10H0V70zm100 0v30H70v-10h20V70h10z" fill="var(--primary)"/>
+                                <path d="M15 15h20v20H15zm5 5h10v10H20z" fill="#0f172a"/>
+                                <path d="M65 15h20v20H65zm5 5h10v10H70z" fill="#0f172a"/>
+                                <path d="M15 65h20v20H15zm5 5h10v10H20z" fill="#0f172a"/>
+                                <rect x="42" y="20" width="8" height="8" fill="#0f172a"/>
+                                <rect x="52" y="25" width="6" height="6" fill="#0f172a"/>
+                                <rect x="42" y="35" width="12" height="6" fill="#0f172a"/>
+                                <rect x="20" y="42" width="6" height="12" fill="#0f172a"/>
+                                <rect x="35" y="45" width="8" height="8" fill="#0f172a"/>
+                                <rect x="65" y="42" width="15" height="6" fill="#0f172a"/>
+                                <rect x="50" y="52" width="8" height="15" fill="#0f172a"/>
+                                <rect x="70" y="55" width="12" height="12" fill="#0f172a"/>
+                                <rect x="42" y="70" width="10" height="10" fill="#0f172a"/>
+                                <rect x="60" y="72" width="8" height="8" fill="#0f172a"/>
+                                <rect x="55" y="82" width="18" height="6" fill="#0f172a"/>
+                                <rect x="42" y="42" width="16" height="16" rx="2" fill="white"/>
+                                <path d="M46 46h8v8h-8z" fill="var(--primary)"/>
+                            </svg>
+                        </div>
+                        <div class="qr-details">
+                            <div class="qr-details-row">
+                                <label>UPI ID:</label>
+                                <span>pay@insurecorp</span>
+                            </div>
+                            <div class="qr-details-row">
+                                <label>Account Holder:</label>
+                                <span>InsureCorp Ltd</span>
+                            </div>
+                            <div class="qr-details-row">
+                                <label>Amount to Pay:</label>
+                                <span id="payAmountLabel">₹24,500</span>
+                            </div>
+                            <div class="qr-details-row">
+                                <label>Reference No:</label>
+                                <span id="payRefLabel" style="font-family: monospace;">REF493820</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instructions Box -->
+                    <div class="instruction-box">
+                        <h4><i class="fa-solid fa-circle-info"></i> Payment Instructions</h4>
+                        <ol>
+                            <li>Open PhonePe, Google Pay, Paytm, BHIM, or any UPI app.</li>
+                            <li>Scan the QR Code shown above or pay directly to the UPI ID.</li>
+                            <li>Pay the exact premium amount of <strong id="instructionPayAmount">₹24,500</strong>.</li>
+                            <li>Take a screenshot of the successful transaction page.</li>
+                            <li>Upload the screenshot and fill the optional Transaction ID below.</li>
+                            <li>Click "Submit Payment" to queue verification.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Screenshot Upload -->
+                    <div class="form-group">
+                        <label class="form-label">Upload Payment Screenshot</label>
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>Click or Drag & Drop Payment Screenshot Here</p>
+                            <span style="font-size: 0.8rem; color: var(--text-light);">Supported Formats: JPG, PNG, PDF (Max 5MB)</span>
+                            <input type="file" id="screenshotInput" accept="image/*,application/pdf" style="display: none;">
+                        </div>
+                        <div class="preview-container" id="previewContainer">
+                            <img id="screenshotPreview" src="" alt="Payment Screenshot Preview">
+                        </div>
+                    </div>
+
+                    <!-- Optional Transaction ID -->
+                    <div class="form-group">
+                        <label for="txnIdInput" class="form-label">Transaction ID / UTR Number (Optional)</label>
+                        <input type="text" id="txnIdInput" class="form-control" placeholder="e.g. 348920193829" autocomplete="off">
+                    </div>
+
+                    <!-- Information Warning Box -->
+                    <div class="info-alert-box">
+                        <i class="fa-solid fa-circle-exclamation"></i> Payments are manually verified by our accounts team. Verification may take 10–30 minutes during business hours. Your policy status will be updated once payment is confirmed.
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn btn-outline ripple-btn" id="backToStep2Btn">Back</button>
+                        <button class="btn btn-success ripple-btn" id="payNowBtn">
+                            Submit Payment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Completed (Pending Verification) -->
+                <div class="step-content" id="step4">
+                    <div class="success-container">
+                        <div class="success-icon" style="background-color: var(--warning-light); color: var(--warning); margin-bottom: 24px;">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div class="success-message">
+                            <h2>Payment Submitted Successfully</h2>
+                            <p>Thank you for submitting your premium payment details. Our accounts team will verify your receipt shortly.</p>
+                            <div style="margin-top: 10px;">
+                                <span class="pending-badge">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i> Pending Manual Verification
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-card">
+                            <h3 style="border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 20px; font-size: 1.2rem; color: var(--text-dark);">Acknowledgement Receipt</h3>
+                            <div class="summary-row">
+                                <span class="summary-label">Reference Number</span>
+                                <span class="summary-value" id="receiptRefNo" style="font-family: monospace;">REF493820</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Policy Number</span>
+                                <span class="summary-value" id="receiptPolicyNo">PNB45896231</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Customer Name</span>
+                                <span class="summary-value" id="receiptHolder">Rahul Kumar</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Amount Paid</span>
+                                <span class="summary-value" id="receiptAmount" style="color: var(--primary); font-weight: 800;">₹24,500</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Submission Date & Time</span>
+                                <span class="summary-value" id="receiptDate">Today</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Payment Status</span>
+                                <span class="summary-value" style="color: var(--warning); font-weight: 700;">Pending Verification</span>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.9rem; color: var(--text-medium); max-width: 580px; margin: 0 auto 30px;">
+                            Once approved, your policy status will be updated, and you will receive an SMS and email confirmation with the official tax receipt.
+                        </p>
+                        
+                        <div class="success-actions">
+                            <button class="btn btn-primary ripple-btn" id="downloadReceiptBtn">
+                                <i class="fa-solid fa-download"></i> Download Acknowledgement
+                            </button>
+                            <button class="btn btn-outline ripple-btn" id="printReceiptBtn">
+                                <i class="fa-solid fa-print"></i> Print Receipt
+                            </button>
+                            <button class="btn btn-outline ripple-btn" id="goHomeBtn">
+                                Return Home
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                <p>&copy; 2026 InsureCorp Limited. All Rights Reserved.</p>
+                <div class="footer-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Refund Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

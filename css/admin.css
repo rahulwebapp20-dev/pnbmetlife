@@ -1,0 +1,298 @@
+/* css/admin.css */
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #0f172a;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: white;
+}
+
+.sidebar-logo i {
+  color: var(--primary);
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  color: #94a3b8;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Main Content Area */
+.admin-main {
+  padding: 40px;
+  background-color: #f8fafc;
+  overflow-y: auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.admin-header h1 {
+  font-size: 1.85rem;
+  color: var(--text-dark);
+}
+
+/* Dashboard Cards (Stats) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-icon.blue { background-color: var(--primary-light); color: var(--primary); }
+.stat-icon.green { background-color: var(--success-light); color: var(--success); }
+.stat-icon.orange { background-color: var(--warning-light); color: var(--warning); }
+
+.stat-details h3 {
+  font-size: 1.75rem;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.stat-details p {
+  color: var(--text-medium);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+/* Panel Sections */
+.admin-panel {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
+/* Form Layout Grid */
+.dashboard-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 30px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 30px;
+}
+
+.dashboard-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+  color: var(--text-dark);
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 12px;
+}
+
+/* Custom Table */
+.table-container {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+th {
+  background-color: #f1f5f9;
+  font-weight: 700;
+  color: var(--text-medium);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Action Badges / Controls */
+.action-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.badge-status {
+  padding: 4px 10px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.badge-status.pending { background-color: var(--warning-light); color: #713f12; }
+.badge-status.approved { background-color: var(--success-light); color: var(--success); }
+.badge-status.rejected { background-color: var(--danger-light); color: var(--danger); }
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+/* Screenshot Preview in Modal */
+.modal-img-preview {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  margin-top: 10px;
+}
+
+/* Responsive grid for Policy edit form inside modal */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    height: auto;
+    position: relative;
+    padding: 20px;
+  }
+  
+  .sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 16px;
+  }
+  
+  .dashboard-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
