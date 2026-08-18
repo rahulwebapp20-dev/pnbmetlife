@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Payment Portal | InsureCorp</title>
-    <meta name="description" content="Securely pay your insurance premium online using UPI in just a few simple steps with our manual verification portal.">
+    <title>Premium Payment Portal | PNB MetLife</title>
+    <meta name="description" content="Securely pay your PNB MetLife insurance premium online using UPI in just a few simple steps with our manual verification portal.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,8 +23,7 @@
     <header>
         <div class="container header-inner">
             <div class="logo">
-                <img src="assets/logo.jpg" alt="InsureCorp Logo">
-                <span>InsureCorp</span>
+                <img src="assets/logo.png" alt="PNB MetLife Logo" style="height: 48px; width: auto; display: block;">
             </div>
             
             <div class="header-right">
@@ -37,32 +36,42 @@
                 </button>
             </div>
         </div>
+        <div class="header-bottom-bar"></div>
     </header>
 
     <!-- Payment Section -->
-    <section class="payment-section section-padding" id="payment-portal" style="min-height: calc(100vh - 180px); display: flex; align-items: center;">
+    <section class="payment-section section-padding" id="payment-portal" style="min-height: calc(100vh - 180px); display: flex; align-items: center; padding-top: 30px;">
         <div class="container" style="width: 100%;">
             
+            <!-- PNB MetLife Gateway Headers -->
+            <div style="max-width: 850px; margin: 0 auto 30px; text-align: left;">
+                <h1 style="color: #0057B8; font-size: 2.25rem; font-weight: 500; margin-bottom: 8px;">PNBMetLife Payment Gateway</h1>
+                <div style="height: 2px; background-color: #0057B8; width: 100%; margin-bottom: 20px;"></div>
+                
+                <p style="color: #555; font-size: 0.95rem; line-height: 1.5; margin-bottom: 5px;">At PNB MetLife, customer convenience is given utmost priority.</p>
+                <p style="color: #555; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px;">So in order to facilitate your premium payment, we now offer the online payment option.</p>
+                
+                <h2 style="color: #0057B8; font-size: 1.15rem; font-weight: 700; margin-bottom: 15px;">Make your premium payment to PNB MetLife in 4 simple steps</h2>
+            </div>
+
             <!-- Timeline Steps -->
             <div class="timeline-wrapper">
-                <div class="timeline-line"></div>
-                <div class="timeline-line-fill" id="progressLineFill"></div>
                 <div class="timeline-progress-bar">
                     <div class="t-step active" id="stepIndicator1">
-                        <div class="t-step-circle" id="circle1">1</div>
-                        <div class="t-step-label">Verification</div>
+                        <div class="t-step-circle">1</div>
+                        <div class="t-step-label">Enter Details</div>
                     </div>
                     <div class="t-step" id="stepIndicator2">
-                        <div class="t-step-circle" id="circle2">2</div>
-                        <div class="t-step-label">Policy Details</div>
+                        <div class="t-step-circle">2</div>
+                        <div class="t-step-label">Premium Details</div>
                     </div>
                     <div class="t-step" id="stepIndicator3">
-                        <div class="t-step-circle" id="circle3">3</div>
-                        <div class="t-step-label">UPI Payment</div>
+                        <div class="t-step-circle">3</div>
+                        <div class="t-step-label">Make Payment</div>
                     </div>
                     <div class="t-step" id="stepIndicator4">
-                        <div class="t-step-circle" id="circle4">4</div>
-                        <div class="t-step-label">Submitted</div>
+                        <div class="t-step-circle">4</div>
+                        <div class="t-step-label">Receive Confirmation</div>
                     </div>
                 </div>
             </div>
@@ -72,25 +81,58 @@
 
                 <!-- Step 1: Policy Verification -->
                 <div class="step-content active" id="step1">
-                    <div class="step-header">
-                        <h2>Verify Your Policy</h2>
-                        <p>Enter your policy number to load details and proceed with the payment.</p>
-                    </div>
                     
-                    <div class="form-group">
-                        <label for="policyNumber" class="form-label">Policy Number</label>
-                        <div class="input-with-icon">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="policyNumber" class="form-control" placeholder="Enter Policy Number (e.g. PNB45896231)" autocomplete="off">
+                    <!-- Step 1A: Choose the payment option -->
+                    <div id="step1A_select">
+                        <h2 style="color: #0057B8; font-size: 1.35rem; font-weight: 700; margin-bottom: 24px; text-align: left;">Choose the payment option</h2>
+                        
+                        <div class="payment-option-list">
+                            <div class="payment-option-item" onclick="selectPaymentOption('renewal')">
+                                <input type="radio" name="paymentOption" id="optRenewal" value="renewal">
+                                <label for="optRenewal">Renewal Payment of Existing Policy</label>
+                            </div>
+                            <div class="payment-option-item" onclick="selectPaymentOption('new_policy')">
+                                <input type="radio" name="paymentOption" id="optNewPolicy" value="new_policy">
+                                <label for="optNewPolicy">Pay Premiums for New Policy</label>
+                            </div>
                         </div>
-                        <div class="form-helper">Your policy number can be found in your insurance welcome kit or previous premium receipt.</div>
-                        <div class="error-message" id="policyError">Please enter a valid policy number (minimum 8 characters).</div>
+
+                        <div class="info-alert-box">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>Policy Owner Mobile Number/Email Id/Policy Number/Application No. Required.</span>
+                        </div>
+
+                        <div class="help-contact-line">
+                            Are you having trouble call us: <a href="tel:18004256969" style="color: #0057B8; font-weight: 700;">1800-425-6969</a> (India only)
+                        </div>
                     </div>
-                    
-                    <div class="step-actions" style="justify-content: center; border: none; margin-top: 20px;">
-                        <button class="btn btn-primary btn-lg ripple-btn" id="verifyBtn" style="width: 100%; max-width: 320px;">
-                            Verify Policy
+
+                    <!-- Step 1B: Enter Details (Initially hidden, slides in when selection is made) -->
+                    <div id="step1B_input" style="display: none;">
+                        <button class="btn btn-outline" onclick="goBackToStep1A()" style="padding: 6px 12px; font-size: 0.85rem; margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-left"></i> Change Option
                         </button>
+                        
+                        <div class="step-header">
+                            <h2 id="step1B_title">Verify Details</h2>
+                            <p id="step1B_subtitle">Enter your policy number to load details and proceed with the payment.</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="policyNumber" class="form-label" id="lblPolicyInput">Policy Number</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="policyNumber" class="form-control" placeholder="Enter Policy Number (e.g. PNB45896231)" autocomplete="off">
+                            </div>
+                            <div class="form-helper" id="helperPolicyInput">Your policy number can be found in your insurance welcome kit or previous premium receipt.</div>
+                            <div class="error-message" id="policyError">Please enter a valid policy number.</div>
+                        </div>
+                        
+                        <div class="step-actions" style="justify-content: center; border: none; margin-top: 20px;">
+                            <button class="btn btn-primary btn-lg ripple-btn" id="verifyBtn" style="width: 100%; max-width: 320px;">
+                                Verify Policy
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -397,7 +439,7 @@
     <footer>
         <div class="container">
             <div class="footer-bottom" style="border-top: none; padding-top: 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
-                <p>&copy; 2026 InsureCorp Limited. All Rights Reserved.</p>
+                <p>&copy; 2026 PNB MetLife India Insurance Company Limited. All Rights Reserved.</p>
                 <div class="footer-legal-links">
                     <a href="#">Privacy Policy</a>
                     <a href="#">Refund Policy</a>

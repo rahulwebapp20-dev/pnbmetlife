@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | InsureCorp Portal</title>
+    <title>Admin Dashboard | PNB MetLife Portal</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
         <div class="sidebar">
             <div class="sidebar-logo">
                 <i class="fa-solid fa-shield-halved"></i>
-                <span>Admin Panel</span>
+                <span>MetLife Admin</span>
             </div>
             <div class="sidebar-menu">
                 <div class="menu-item active" id="menuSubmissions">
@@ -39,11 +39,6 @@
                     <i class="fa-solid fa-qrcode"></i>
                     <span>UPI Config</span>
                 </div>
-            </div>
-            
-            <div class="menu-item" id="menuLogout" style="margin-top: auto; border-top: 1px solid #334155; padding-top: 20px; color: #ef4444;">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Logout</span>
             </div>
         </div>
 
@@ -329,33 +324,7 @@
         </div>
     </div>
 
-    <!-- Admin Login Screen Overlay -->
-    <div class="modal-overlay" id="adminLoginOverlay" style="display: flex; z-index: 1000;">
-        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 40px 30px;">
-            <div style="width: 64px; height: 64px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 20px;">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2 style="margin-bottom: 10px; color: var(--text-dark);">Admin Gate</h2>
-            <p style="color: var(--text-medium); font-size: 0.9rem; margin-bottom: 30px;">Please authenticate to access the insurance dashboard.</p>
-            
-            <form id="adminLoginForm">
-                <div class="form-group">
-                    <label for="adminUsername" class="form-label">Username</label>
-                    <input type="text" id="adminUsername" class="form-control" placeholder="Enter Username" required autocomplete="off">
-                </div>
-                <div class="form-group" style="margin-bottom: 30px;">
-                    <label for="adminPassword" class="form-label">Password</label>
-                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter Password" required>
-                </div>
-                <div id="loginError" style="color: var(--danger); font-size: 0.85rem; font-weight: 700; margin-bottom: 15px; display: none;">
-                    Invalid username or password.
-                </div>
-                <button type="submit" class="btn btn-primary ripple-btn" style="width: 100%; padding: 14px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Authenticate
-                </button>
-            </form>
-        </div>
-    </div>
+
 
     <!-- Supabase SDK and custom logic scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

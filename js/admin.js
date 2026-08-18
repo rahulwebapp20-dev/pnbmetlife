@@ -91,89 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seed offline data
     seedLocalStorage();
 
-    // Authentication Guard
-    const loginOverlay = document.getElementById('adminLoginOverlay');
-    const loginForm = document.getElementById('adminLoginForm');
-    const loginError = document.getElementById('loginError');
-    const logoutBtn = document.getElementById('menuLogout');
-
-    const checkAuthentication = () => {
-        if (sessionStorage.getItem('admin_authenticated') === 'true') {
-            if (loginOverlay) loginOverlay.style.display = 'none';
-        } else {
-            if (loginOverlay) loginOverlay.style.display = 'flex';
-        }
-    };
-
-    // Check auth on load
-    checkAuthentication();
-
-    // Login Form Submit
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const user = document.getElementById('adminUsername').value.trim();
-            const pass = document.getElementById('adminPassword').value;
-            const authSubmitBtn = loginForm.querySelector('button[type="submit"]');
-
-            const loginSuccess = () => {
-                sessionStorage.setItem('admin_authenticated', 'true');
-                if (loginOverlay) loginOverlay.style.display = 'none';
-                loginForm.reset();
-                if (loginError) loginError.style.display = 'none';
-                refreshData();
-            };
-
-            const loginFail = (msg = "Invalid username or password.") => {
-                if (loginError) {
-                    loginError.style.display = 'block';
-                    loginError.innerText = msg;
-                }
-            };
-
-            // If entered credentials match local config credentials, authenticate immediately
-            if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-                loginSuccess();
-                return;
-            }
-
-            if (useLocalFallback) {
-                loginFail();
-            } else {
-                if (authSubmitBtn) authSubmitBtn.classList.add('btn-loading');
-                try {
-                    const { data, error } = await supabase
-                        .from('admin_users')
-                        .select('*')
-                        .eq('username', user)
-                        .eq('password', pass)
-                        .single();
-
-                    if (authSubmitBtn) authSubmitBtn.classList.remove('btn-loading');
-
-                    if (error || !data) {
-                        throw new Error(error ? error.message : "Invalid username or password.");
-                    }
-                    loginSuccess();
-                } catch (err) {
-                    if (authSubmitBtn) authSubmitBtn.classList.remove('btn-loading');
-                    console.error("Login verification error:", err);
-                    loginFail(err.message || "Invalid username or password.");
-                }
-            }
-        });
-    }
-
-    // Logout Click
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm("Are you sure you want to log out from the Admin Panel?")) {
-                sessionStorage.removeItem('admin_authenticated');
-                checkAuthentication();
-            }
-        });
-    }
+    // Authentication Guard disabled as requested by the user. Accessing dashboard directly.
 
     // Connection indicator
     const connectionBadge = document.getElementById('dbConnectionBadge');
@@ -592,11 +510,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     const { error } = await supabase
                         .from('upi_settings')
-                        .update({
+                        .upsert({
+                            id: 1,
                             upi_id: newUpiId,
                             account_holder_name: newUpiHolder
-                        })
-                        .eq('id', 1);
+                        });
                     if (error) throw error;
                 }
 
@@ -610,8 +528,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initial load if authenticated
-    if (sessionStorage.getItem('admin_authenticated') === 'true') {
-        refreshData();
+    // Initial load of dashboard data directly
+    refreshData();
+
+    // Supabase Real-Time Subscriptions
+    if (!useLocalFallback && supabase) {
+        console.log("Subscribing to realtime postgres changes...");
+        supabase
+            .channel('schema-db-changes')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'submissions' },
+                (payload) => {
+                    console.log("Realtime submissions change detected:", payload);
+                    refreshData();
+                }
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'policies' },
+                (payload) => {
+                    console.log("Realtime policies change detected:", payload);
+                    refreshData();
+                }
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'upi_settings' },
+                (payload) => {
+                    console.log("Realtime upi_settings change detected:", payload);
+                    refreshData();
+                }
+            )
+            .subscribe();
     }
 });

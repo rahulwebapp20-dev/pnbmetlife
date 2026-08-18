@@ -46,8 +46,91 @@ let activePolicy = null;
 let activeUpi = null;
 let loadedFile = null;
 let globalRefId = '';
+let selectedOptionType = 'renewal';
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // Global functions for PNB MetLife payment option selections
+    window.selectPaymentOption = function(option) {
+        selectedOptionType = option;
+        
+        // Update visual selection indicators
+        document.querySelectorAll('.payment-option-item').forEach(item => {
+            item.classList.remove('selected');
+            const radio = item.querySelector('input[type="radio"]');
+            if (radio) radio.checked = false;
+        });
+
+        const selectedItem = document.getElementById(option === 'renewal' ? 'optRenewal' : 'optNewPolicy').closest('.payment-option-item');
+        if (selectedItem) {
+            selectedItem.classList.add('selected');
+            const radio = selectedItem.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+        }
+
+        // Dynamically update Step 1B labels & placeholders
+        const titleEl = document.getElementById('step1B_title');
+        const subtitleEl = document.getElementById('step1B_subtitle');
+        const labelEl = document.getElementById('lblPolicyInput');
+        const placeholderInput = document.getElementById('policyNumber');
+        const helperEl = document.getElementById('helperPolicyInput');
+        const errorEl = document.getElementById('policyError');
+
+        if (option === 'renewal') {
+            if (titleEl) titleEl.innerText = "Verify Renewal Details";
+            if (subtitleEl) subtitleEl.innerText = "Enter your policy number to load details and proceed with the payment.";
+            if (labelEl) labelEl.innerText = "Policy Number";
+            if (placeholderInput) {
+                placeholderInput.placeholder = "Enter Policy Number (e.g. PNB45896231)";
+                placeholderInput.value = "";
+            }
+            if (helperEl) helperEl.innerText = "Your policy number can be found in your insurance welcome kit or previous premium receipt.";
+            if (errorEl) errorEl.innerText = "Please enter a valid policy number.";
+        } else {
+            if (titleEl) titleEl.innerText = "Verify New Policy Details";
+            if (subtitleEl) subtitleEl.innerText = "Enter your application number to load details and proceed with the payment.";
+            if (labelEl) labelEl.innerText = "Application Number";
+            if (placeholderInput) {
+                placeholderInput.placeholder = "Enter Application/Proposal Number";
+                placeholderInput.value = "";
+            }
+            if (helperEl) helperEl.innerText = "Your application number can be found in your proposal form copy or payment confirmation receipt.";
+            if (errorEl) errorEl.innerText = "Please enter a valid application number.";
+        }
+
+        // Clean validation errors
+        if (placeholderInput) placeholderInput.classList.remove('is-invalid');
+        if (errorEl) errorEl.style.display = 'none';
+
+        // Slide transition
+        setTimeout(() => {
+            const selectDiv = document.getElementById('step1A_select');
+            const inputDiv = document.getElementById('step1B_input');
+            if (selectDiv) selectDiv.style.display = 'none';
+            if (inputDiv) {
+                inputDiv.style.display = 'block';
+                inputDiv.style.animation = 'fadeIn 0.4s ease forwards';
+            }
+        }, 250);
+    };
+
+    window.goBackToStep1A = function() {
+        const selectDiv = document.getElementById('step1A_select');
+        const inputDiv = document.getElementById('step1B_input');
+        
+        // Reset radio items selections
+        document.querySelectorAll('.payment-option-item').forEach(item => {
+            item.classList.remove('selected');
+            const radio = item.querySelector('input[type="radio"]');
+            if (radio) radio.checked = false;
+        });
+
+        if (inputDiv) inputDiv.style.display = 'none';
+        if (selectDiv) {
+            selectDiv.style.display = 'block';
+            selectDiv.style.animation = 'fadeIn 0.4s ease forwards';
+        }
+    };
     
     // Ripple Effect for buttons
     const buttons = document.querySelectorAll('.ripple-btn');
@@ -168,27 +251,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Step Progress Updates
     const updateProgress = (step) => {
-        const fillPercentage = ((step - 1) / (totalSteps - 1)) * 100;
-        const progressLine = document.getElementById('progressLineFill');
-        if (progressLine) {
-            progressLine.style.width = `${fillPercentage}%`;
-        }
-        
         for (let i = 1; i <= totalSteps; i++) {
             const indicator = document.getElementById(`stepIndicator${i}`);
-            const circle = document.getElementById(`circle${i}`);
-            if (indicator && circle) {
-                if (i < step) {
-                    indicator.classList.add('completed');
-                    indicator.classList.remove('active');
-                    circle.innerHTML = '<i class="fa-solid fa-check"></i>';
-                } else if (i === step) {
-                    indicator.classList.add('active');
-                    indicator.classList.remove('completed');
-                    circle.innerHTML = `${i}`;
-                } else {
-                    indicator.classList.remove('active', 'completed');
-                    circle.innerHTML = `${i}`;
+            if (indicator) {
+                const circle = indicator.querySelector('.t-step-circle');
+                if (circle) {
+                    if (i < step) {
+                        circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    } else {
+                        circle.innerHTML = `${i}`;
+                    }
                 }
             }
         }
@@ -198,10 +270,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.step-content').forEach(el => {
             el.classList.remove('active');
         });
+        document.querySelectorAll('.t-step').forEach((el, index) => {
+            if (index + 1 < step) {
+                el.classList.add('completed');
+                el.classList.remove('active');
+            } else if (index + 1 === step) {
+                el.classList.add('active');
+                el.classList.remove('completed');
+            } else {
+                el.classList.remove('active', 'completed');
+            }
+        });
         
         const stepEl = document.getElementById(`step${step}`);
         if (stepEl) {
             stepEl.classList.add('active');
+        }
+
+        // Reset to Step 1A when returning to step 1
+        if (step === 1) {
+            goBackToStep1A();
         }
         
         currentStep = step;
